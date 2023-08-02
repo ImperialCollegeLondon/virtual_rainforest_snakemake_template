@@ -1,0 +1,3 @@
+[submodule "virtual_rainforest"]
+	path = virtual_rainforest
+	url = https://github.com/ImperialCollegeLondon/virtual_rainforest.git
