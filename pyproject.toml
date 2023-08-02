@@ -9,6 +9,7 @@ readme = "README.md"
 python = ">=3.11,<3.12"
 snakemake = "^7.31.1"
 pre-commit = "^3.3.3"
+virtual-rainforest = {path = "virtual_rainforest"}
 
 
 [build-system]
