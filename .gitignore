@@ -1,6 +1,7 @@
 # Snakemake
 out/
 .snakemake
+snakejob.vr.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
