@@ -1,0 +1,10 @@
+[flake8]
+max-line-length = 88
+extend-ignore =
+	E203,
+	D104,
+	# Class docstrings under class declaration, not __init__.
+	D107,
+	# No blank lines allowed after function docstring
+	D202
+docstring-convention = google
