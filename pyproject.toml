@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "virtual-rainforest-snakemake-template"
+version = "0.1.0"
+description = "A template repository for running Virtual Rainforest analyses using Snakemake."
+authors = ["Alex Dewar <a.dewar@imperial.ac.uk>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+snakemake = "^7.31.1"
+pre-commit = "^3.3.3"
+virtual-rainforest = {path = "virtual_rainforest"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
