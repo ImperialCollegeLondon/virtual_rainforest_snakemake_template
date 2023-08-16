@@ -1,6 +1,8 @@
 # Virtual Rainforest Snakemake template
 
+<!-- markdownlint-disable MD026 -->
 ## :construction: NOTE: This repository is still a work in progress! :construction:
+<!-- markdownlint-enable MD026 -->
 
 This is a template repository for running [Virtual Rainforest] analyses using
 [Snakemake]. Snakemake is a workflow management system, which allows for running jobs in
@@ -11,7 +13,6 @@ The idea with this repository is that it can be used as a foundation for differe
 analyses. To start a new analysis, you should clone this repository (and submodules),
 make any modifications you need to the configuration files and [Snakefile], then commit
 these to git. This should allow others to easily reproduce your work.
-
 
 ## Getting started
 
@@ -32,7 +33,6 @@ To activate your newly created virtual environment, run:
 ```sh
 poetry shell
 ```
-
 
 ## Running Snakemake locally
 
@@ -85,7 +85,6 @@ need. To use it, you need to additionally pass the `--workflow-profile` flag, li
 ```sh
 snakemake --profile pbs-icl --workflow-profile workflow-profile
 ```
-
 
 [consult the Getting Started Page]: https://wiki.imperial.ac.uk/display/HPC/Getting+started
 [Look at the Snakefile]: ./Snakefile
