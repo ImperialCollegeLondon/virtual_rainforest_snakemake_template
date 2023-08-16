@@ -27,6 +27,7 @@ repos:
     rev: v0.33.0
     hooks:
       - id: markdownlint
+        args: ["--disable", "MD013", "--"]
   - repo: https://github.com/snakemake/snakefmt
     rev: v0.8.4
     hooks:
