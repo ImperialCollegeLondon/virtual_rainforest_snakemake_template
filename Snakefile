@@ -1,35 +1,22 @@
 from virtual_rainforest import example_data_path
+from snakemake_helper import VRExperiment
 
-# Folders where simulations will be saved to
-outdir = "out/moisture_{moisture}"
-
-
-def param(name, value):
-    return f'--param "{name}={value}" '
-
-
-def strparam(name, value):
-    # Note the double-escaping of quotes
-    return param(name, f'\\"{value}\\"')
+PARAMS = {
+    "hydrology": {"initial_soil_moisture": (0.5, 0.9)},
+    "core": {"layers": {"soil_layers": range(2, 4)}},
+}
+sim = VRExperiment("out", PARAMS)
 
 
 rule all:
     input:
-        expand(f"{outdir}/simulation_output.toml", moisture=(0.1, 0.5, 0.9)),
+        sim.all_outputs,
 
 
 rule vr:
     input:
         example_data_path,
     output:
-        f"{outdir}/simulation_output.toml",
-        f"{outdir}/initial_state.nc",
-        f"{outdir}/final_state.nc",
-        f"{outdir}/all_continuous_data.nc",
-    shell:
-        (
-            'vr_run "{input}" '
-            ' --outpath "out/moisture_{wildcards.moisture}"'
-            ' --merge "{output[0]}" '
-            + param("hydrology.initial_soil_moisture", "{wildcards.moisture}")
-        )
+        sim.output,
+    run:
+        sim.run(input, output)
