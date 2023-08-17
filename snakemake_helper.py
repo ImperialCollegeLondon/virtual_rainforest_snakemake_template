@@ -9,7 +9,6 @@ from typing import Any, Iterable
 
 from sklearn.model_selection import ParameterGrid
 from snakemake.io import Namedlist
-
 from virtual_rainforest.entry_points import vr_run
 
 
