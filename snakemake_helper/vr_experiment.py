@@ -7,9 +7,10 @@ from itertools import product
 from pathlib import Path
 from typing import Any, Iterable
 
-from sklearn.model_selection import ParameterGrid
 from snakemake.io import Namedlist
 from virtual_rainforest.entry_points import vr_run
+
+from .parameter_grid import ParameterGrid
 
 
 def _flatten_dict(d: dict[str, Any]) -> dict[str, Any]:
