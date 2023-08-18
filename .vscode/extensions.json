@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "snakemake.snakemake-lang",
+        "tfehlmann.snakefmt"
+    ]
+}
