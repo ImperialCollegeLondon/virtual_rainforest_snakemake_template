@@ -1,9 +1,5 @@
 # Virtual Rainforest Snakemake template
 
-<!-- markdownlint-disable MD026 -->
-## :construction: NOTE: This repository is still a work in progress! :construction:
-<!-- markdownlint-enable MD026 -->
-
 This is a template repository for running [Virtual Rainforest] analyses using
 [Snakemake]. Snakemake is a workflow management system, which allows for running jobs in
 parallel on a number of backends, including multiple cores on the same machine as well
