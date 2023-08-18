@@ -8,6 +8,7 @@ import numpy as np
 import pytest
 
 from snakemake_helper import VRExperiment
+from snakemake_helper.vr_experiment import _get_outpath_with_wildcards
 
 PARAMS = {
     "b": {"c": {"param": range(2, 4)}},
@@ -23,6 +24,13 @@ OUTPUT_FILES = (
     "final_state.nc",
     "all_continuous_data.nc",
 )
+
+
+def test_get_outpath_with_wildcards() -> None:
+    """Test the _get_outpath_with_wildcards() function."""
+    assert Path(
+        _get_outpath_with_wildcards("out", ("core.param1", "core.param2"))
+    ) == Path("out/core.param1_{core_param1}/core.param2_{core_param2}")
 
 
 @pytest.fixture

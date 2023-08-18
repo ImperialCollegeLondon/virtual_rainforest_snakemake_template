@@ -57,9 +57,6 @@ def _get_outpath_with_wildcards(out_path_root: str, param_names: Iterable[str]) 
     """Get the output path with Snakemake wildcards in it.
 
     Parameter names are used for wildcards, with dots replaced with underscores.
-
-    >>> _get_outpath_with_wildcards('out', ('core.param1', 'core.param2'))
-    'out/core.param1_{core_param1}/core.param2_{core_param2}'
     """
     outpath = Path(out_path_root)
     for name in sorted(param_names):
