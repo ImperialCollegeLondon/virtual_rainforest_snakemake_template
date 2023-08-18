@@ -86,3 +86,63 @@ def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
     vr_run_mock.assert_called_once_with(
         input, params, outpath / "vr_full_model_configuration.toml"
     )
+
+
+@patch("snakemake_helper.vr_experiment.vr_run")
+def test_run_overlapping_params(vr_run_mock: Mock) -> None:
+    """Test the run() method invokes vr_run() correctly when config options overlap.
+
+    The parameter dicts have to be recursively merged in order not to clobber sub-dicts.
+    """
+    all_params: dict[str, dict[str, Any]] = {
+        "a": {"param": range(2)},
+        "core": {"b": {"param": range(2)}},
+    }
+    exp = VRExperiment("out", all_params)
+    params: dict[str, dict[str, Any]] = {
+        "a": {"param": 0},
+        "core": {"b": {"param": 1}},
+    }
+    outpath = Path(
+        f"out/a.param_{params['a']['param']}/"
+        f"core.b.param_{params['core']['b']['param']}"
+    )
+
+    # Params also needs to include the output path
+    params["core"] |= {"data_output_options": {"out_path": str(outpath)}}
+
+    input = ("dataset",)
+    output = [str(outpath / file) for file in OUTPUT_FILES]
+    exp.run(input, output)
+    vr_run_mock.assert_called_once_with(
+        input, params, outpath / "vr_full_model_configuration.toml"
+    )
+
+
+@patch("snakemake_helper.vr_experiment.vr_run")
+def test_run_outpath_set_twice(vr_run_mock: Mock) -> None:
+    """Test the run() method raises an error if the outpath is set twice.
+
+    It can't be set as a config option.
+    """
+    all_params: dict[str, dict[str, Any]] = {
+        "a": {"param": range(2)},
+        "core": {"data_output_options": {"out_path": ("something",)}},
+    }
+    exp = VRExperiment("out", all_params)
+    params: dict[str, dict[str, Any]] = {
+        "a": {"param": 0},
+        "core": {"data_output_options": {"out_path": ("something",)}},
+    }
+    outpath = Path(
+        f"out/a.param_{params['a']['param']}/"
+        "core.data_output_options.out_path_something"
+    )
+
+    # Params also needs to include the output path
+    params["core"] = {"data_output_options": {"out_path": str(outpath)}}
+
+    input = ("dataset",)
+    output = [str(outpath / file) for file in OUTPUT_FILES]
+    with pytest.raises(RuntimeError):
+        exp.run(input, output)

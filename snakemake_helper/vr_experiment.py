@@ -8,6 +8,7 @@ from itertools import product
 from pathlib import Path
 from typing import Any
 
+from virtual_rainforest.core.config import config_merge
 from virtual_rainforest.entry_points import vr_run
 
 from .parameter_grid import ParameterGrid
@@ -134,7 +135,10 @@ class VRExperiment:
         params = self._param_set_dict[outpath]
 
         # Set outpath
-        params |= {"core": {"data_output_options": {"out_path": str(outpath)}}}
+        outpath_opt = {"core": {"data_output_options": {"out_path": str(outpath)}}}
+        params, conflicts = config_merge(params, outpath_opt)
+        if conflicts:
+            raise RuntimeError("Outpath config option was set twice")
 
         # Run simulation
         vr_run(input, params, outpath / self.MERGE_CONFIG_FILE)
