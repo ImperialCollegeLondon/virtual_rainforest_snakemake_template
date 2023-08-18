@@ -1,22 +1,24 @@
 from virtual_rainforest import example_data_path
 from snakemake_helper import VRExperiment
 
+# The parameter grid to be used for the simulation
 PARAMS = {
     "hydrology": {"initial_soil_moisture": (0.5, 0.9)},
     "core": {"layers": {"soil_layers": range(2, 4)}},
 }
-sim = VRExperiment("out", PARAMS)
+exp = VRExperiment("out", PARAMS)
 
 
 rule all:
     input:
-        sim.all_outputs,
+        exp.all_outputs,
 
 
 rule vr:
     input:
+        # NB: You should replace this with the path to your config(s)
         example_data_path,
     output:
-        sim.output,
+        exp.output,
     run:
-        sim.run(input, output)
+        exp.run(input, output)
