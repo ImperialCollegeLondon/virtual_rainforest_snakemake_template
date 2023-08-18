@@ -1,5 +1,7 @@
 # Virtual Rainforest Snakemake template
 
+[![codecov](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template/graph/badge.svg?token=BN2Y4SE4W0)](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template)
+
 This is a template repository for running [Virtual Rainforest] analyses using
 [Snakemake]. Snakemake is a workflow management system, which allows for running jobs in
 parallel on a number of backends, including multiple cores on the same machine as well
