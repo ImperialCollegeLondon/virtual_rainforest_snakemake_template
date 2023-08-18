@@ -62,15 +62,6 @@ def test_all_outputs(vr_exp: VRExperiment) -> None:
 
 
 @patch("snakemake_helper.vr_experiment.vr_run")
-def test_run_bad_input(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
-    """Test the run() method raises an error if the outputs are unknown."""
-    outpath = Path("out/a.param_1/b.c.param_2")
-    outputs = (str(outpath / file) for file in OUTPUT_FILES)
-    with pytest.raises(RuntimeError):
-        vr_exp.run(("dataset",), (*outputs, "another/folder/file.txt"))
-
-
-@patch("snakemake_helper.vr_experiment.vr_run")
 def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
     """Test the run() method invokes vr_run() correctly."""
     params: dict[str, dict[str, Any]] = {
@@ -90,6 +81,21 @@ def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
     vr_run_mock.assert_called_once_with(
         input, params, outpath / "vr_full_model_configuration.toml"
     )
+
+
+@patch("snakemake_helper.vr_experiment.vr_run")
+def test_run_bad_input(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
+    """Test the run() method raises an error if the outputs are unknown."""
+    outpath = Path("out/a.param_1/b.c.param_2")
+    outputs = (str(outpath / file) for file in OUTPUT_FILES)
+
+    # File in unknown folder
+    with pytest.raises(RuntimeError):
+        vr_exp.run(("dataset",), (*outputs, f"another/folder/{OUTPUT_FILES[0]}"))
+
+    # Unknown file in known folder
+    with pytest.raises(RuntimeError):
+        vr_exp.run(("dataset",), (*outputs, str(outpath / "unknown_file.txt")))
 
 
 @patch("snakemake_helper.vr_experiment.vr_run")

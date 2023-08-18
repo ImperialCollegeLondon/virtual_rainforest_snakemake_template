@@ -71,12 +71,12 @@ class VRExperiment:
     """Represents all parameter sets which are being tested."""
 
     MERGE_CONFIG_FILE = "vr_full_model_configuration.toml"
-    OUTPUT_FILES = (
+    OUTPUT_FILES = {
         MERGE_CONFIG_FILE,
         "initial_state.nc",
         "final_state.nc",
         "all_continuous_data.nc",
-    )
+    }
 
     def __init__(self, out_path_root: str, param_grid: dict[str, Any]):
         """Create a new VRExperiment.
@@ -131,6 +131,8 @@ class VRExperiment:
         outpath = Path(output[0]).parent
         if not all(Path(path).parent == outpath for path in output):
             raise RuntimeError("Output files are not all in same folder")
+        if not all(Path(path).name in self.OUTPUT_FILES for path in output):
+            raise RuntimeError("Unknown file given as output")
 
         params = self._param_set_dict[outpath]
 
