@@ -1,3 +1,7 @@
+# This file is a simple example of a Snakefile for invoking Virtual Rainforest. It will
+# run multiple simulations using the specified parameter grid and put the results in a
+# folder called "out". For more information, consult README.md.
+
 from virtual_rainforest import example_data_path
 from snakemake_helper import VRExperiment
 
