@@ -10,9 +10,13 @@ import pytest
 from snakemake_helper import VRExperiment
 
 PARAMS = {
-    "a": {"param": range(2)},
     "b": {"c": {"param": range(2, 4)}},
+    "a": {"param": range(2)},
 }
+"""Parameters to vary between runs.
+
+NB: Deliberately not in alphabetical order, as params should be sorted.
+"""
 OUTPUT_FILES = (
     "vr_full_model_configuration.toml",
     "initial_state.nc",
