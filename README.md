@@ -16,7 +16,14 @@ these to git. This should allow others to easily reproduce your work.
 
 ## Getting started
 
-First, you need to check out the Virtual Rainforest submodule, like so:
+First you need to clone this repository and check out its submodules:
+
+```sh
+git clone --recursive https://github.com/ImperialCollegeLondon/virtual_rainforest_snakemake_template.git
+```
+
+Note the extra `--recursive` flag! If you forgot to check out the submodules, you can do
+so later by running:
 
 ```sh
 git submodule update --init
