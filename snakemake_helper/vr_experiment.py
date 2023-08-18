@@ -3,11 +3,11 @@
 The main functionality for this module lies in the VRExperiment class, which represents
 all the parameter sets which are being tested.
 """
+from collections.abc import Iterable, Sequence
 from itertools import product
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
-from snakemake.io import Namedlist
 from virtual_rainforest.entry_points import vr_run
 
 from .parameter_grid import ParameterGrid
@@ -56,6 +56,9 @@ def _get_outpath_with_wildcards(out_path_root: str, param_names: Iterable[str]) 
     """Get the output path with Snakemake wildcards in it.
 
     Parameter names are used for wildcards, with dots replaced with underscores.
+
+    >>> _get_outpath_with_wildcards('out', ('core.param1', 'core.param2'))
+    'out/core.param1_{core_param1}/core.param2_{core_param2}'
     """
     outpath = Path(out_path_root)
     for name in param_names:
@@ -122,7 +125,7 @@ class VRExperiment:
         """Get outputs with wildcards for parameter values."""
         return [str(Path(self._outpath) / f) for f in self.OUTPUT_FILES]
 
-    def run(self, input: Namedlist, output: Namedlist):
+    def run(self, input: Sequence[str], output: Sequence[str]):
         """Run a simulation for the specified config to be saved in output."""
         outpath = Path(output[0]).parent
         if not all(Path(path).parent == outpath for path in output):
@@ -135,20 +138,3 @@ class VRExperiment:
 
         # Run simulation
         vr_run(input, params, outpath / self.MERGE_CONFIG_FILE)
-
-
-if __name__ == "__main__":
-    # Test _flatten_dict
-    test_dict = {"a": {"b": "value"}}
-    assert _flatten_dict(test_dict) == {"a.b": "value"}
-    unflattened = _unflatten_dict({"a.b": "value"})
-    assert unflattened == test_dict
-
-    # Test VRSimulation
-    params = {
-        "hydrology": {"initial_soil_moisture": (0.1, 0.5, 0.9)},
-        "another": {"param": (5,)},
-    }
-    sim = VRExperiment("out", params)
-    print(f"OUTPATH: {sim._outpath}")
-    print(list(sim.all_outputs))

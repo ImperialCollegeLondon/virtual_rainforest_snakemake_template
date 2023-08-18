@@ -1,8 +1,8 @@
 """This implementation of ParameterGrid is taken from scikit-learn."""
 import operator
+from collections.abc import Iterable, Mapping, Sequence
 from functools import partial, reduce
 from itertools import product
-from typing import Iterable, Mapping, Sequence
 
 import numpy as np
 

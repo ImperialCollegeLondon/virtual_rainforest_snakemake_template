@@ -19,6 +19,10 @@ pytest-mypy = "^0.10.3"
 flake8 = "^6.1.0"
 numpy = "^1.25.2"
 
+[tool.coverage.run]
+# The implementation was copied from scikit-learn
+omit = ["snakemake_helper/parameter_grid.py"]
+
 [tool.mypy]
 ignore_missing_imports = true
 exclude = [".venv/"]
@@ -27,7 +31,7 @@ exclude = [".venv/"]
 profile = "black"
 
 [tool.pytest.ini_options]
-addopts = "-v --mypy -p no:warnings --cov=snakemake_helper --cov-report=html --doctest-modules snakemake_helper"
+addopts = "-v --mypy -p no:warnings --cov=snakemake_helper --cov-report=html --doctest-modules snakemake_helper tests"
 
 [build-system]
 requires = ["poetry-core"]
