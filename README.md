@@ -37,10 +37,46 @@ To activate your newly created virtual environment, run:
 poetry shell
 ```
 
-## Running Snakemake locally
+## Working with the Snakefile
 
 Snakemake uses Snakefiles to specify workflows. [Look at the Snakefile] in this
 repository to see an example workflow.
+
+The Snakefile in this repository is set up to run Virtual Rainforest with a few
+different parameters. If you just want to check that things are working, feel free to
+skip this section for now.
+
+If you want to use a different parameter grid, you need to modify the `PARAMS` variable.
+The parameters to vary are specified in a nested `dict`, with the sections named in the
+same way as in Virtual Rainforest's TOML config files. Each non-`dict` element must be
+an `Iterable`. If you want to use one particular value for all of the runs, you
+therefore need to wrap it in a `list` (or just set the parameter in one of your config
+files).
+
+To add extra processing steps (e.g. to combine data files or produce figures), you
+need to create extra rules. For example, if you wish to perform some analysis on the
+generated output files, you could add a rule like this:
+
+```snakemake
+rule analysis:
+    input:
+        exp.all_outputs,
+    output:
+        "analysis_output.toml",
+    shell:
+        "analysis_program {input}"
+```
+
+Note that you would then need to update "rule all" to depend on the output of your
+analysis program instead:
+
+```snakemake
+rule all:
+    input:
+        "analysis_output.toml",
+```
+
+## Running Snakemake locally
 
 To run the workflow on your local machine, use the `snakemake` command. You need to
 specify the maximum number of CPUs Snakemake is allowed to use with the `--cores` flag.
