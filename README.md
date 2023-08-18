@@ -1,5 +1,6 @@
 # Virtual Rainforest Snakemake template
 
+![GitHub CI](https://github.com/ImperialCollegeLondon/virtual_rainforest_snakemake_template/actions/workflows/ci.yml/badge.svg)
 [![codecov](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template/graph/badge.svg?token=BN2Y4SE4W0)](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template)
 
 This is a template repository for running [Virtual Rainforest] analyses using
