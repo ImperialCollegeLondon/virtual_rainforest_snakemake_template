@@ -11,7 +11,24 @@ from typing import Any
 from virtual_rainforest.core.config import config_merge
 from virtual_rainforest.entry_points import vr_run
 
-from .parameter_grid import ParameterGrid
+
+def _permute_parameter_grid(
+    param_grid: dict[str, Iterable]
+) -> Iterable[dict[str, Any]]:
+    """Generate each combination of parameters for the given parameter grid.
+
+    This function is a generator so the grid is computed lazily.
+
+    >>> list(_permute_parameter_grid({'a': range(2), 'b': range(3)}))
+    [{'a': 0, 'b': 0}, {'a': 0, 'b': 1}, {'a': 0, 'b': 2}, {'a': 1, 'b': 0}, {'a': 1, 'b': 1}, {'a': 1, 'b': 2}]
+    """  # noqa: E501
+    if not param_grid:
+        return
+
+    items = sorted(param_grid.items())
+    keys, values = zip(*items)
+    for v in product(*values):
+        yield dict(zip(keys, v))
 
 
 def _flatten_dict(d: dict[str, Any]) -> dict[str, Any]:
@@ -104,7 +121,7 @@ class VRExperiment:
     ) -> dict[Path, dict[str, Any]]:
         """Return a dict with parameter sets keyed by output path."""
         param_set_dict = {}
-        for param_set in ParameterGrid(params_flat):
+        for param_set in _permute_parameter_grid(params_flat):
             args_dict = {
                 key.replace(".", "_"): value for key, value in param_set.items()
             }
