@@ -56,9 +56,10 @@ an `Iterable`. If you want to use one particular value for all of the runs, you
 therefore need to wrap it in a `list` (or just set the parameter in one of your config
 files).
 
-To add extra processing steps (e.g. to combine data files or produce figures), you
-need to create extra rules. For example, if you wish to perform some analysis on the
-generated output files, you could add a rule like this:
+To add extra processing steps (e.g. to combine data files or produce figures), you need
+to create extra rules. For example, if you wanted to perform some analysis on the
+generated output files using a script called `analysis_program`, you could replace the
+existing `rule all` with something like this:
 
 ```snakemake
 rule analysis:
@@ -68,15 +69,6 @@ rule analysis:
         "analysis_output.toml",
     shell:
         "analysis_program {input}"
-```
-
-Note that you would then need to update "rule all" to depend on the output of your
-analysis program instead:
-
-```snakemake
-rule all:
-    input:
-        "analysis_output.toml",
 ```
 
 ## Running Snakemake locally
