@@ -1,8 +1,7 @@
 # Virtual Rainforest Snakemake template
 
-<!-- markdownlint-disable MD026 -->
-## :construction: NOTE: This repository is still a work in progress! :construction:
-<!-- markdownlint-enable MD026 -->
+![GitHub CI](https://github.com/ImperialCollegeLondon/virtual_rainforest_snakemake_template/actions/workflows/ci.yml/badge.svg)
+[![codecov](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template/graph/badge.svg?token=BN2Y4SE4W0)](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template)
 
 This is a template repository for running [Virtual Rainforest] analyses using
 [Snakemake]. Snakemake is a workflow management system, which allows for running jobs in
@@ -16,7 +15,14 @@ these to git. This should allow others to easily reproduce your work.
 
 ## Getting started
 
-First, you need to check out the Virtual Rainforest submodule, like so:
+First you need to clone this repository and check out its submodules:
+
+```sh
+git clone --recursive https://github.com/ImperialCollegeLondon/virtual_rainforest_snakemake_template.git
+```
+
+Note the extra `--recursive` flag! If you forgot to check out the submodules, you can do
+so later by running:
 
 ```sh
 git submodule update --init
@@ -34,10 +40,38 @@ To activate your newly created virtual environment, run:
 poetry shell
 ```
 
-## Running Snakemake locally
+## Working with the Snakefile
 
 Snakemake uses Snakefiles to specify workflows. [Look at the Snakefile] in this
 repository to see an example workflow.
+
+The Snakefile in this repository is set up to run Virtual Rainforest with a few
+different parameters. If you just want to check that things are working, feel free to
+skip this section for now.
+
+If you want to use a different parameter grid, you need to modify the `PARAMS` variable.
+The parameters to vary are specified in a nested `dict`, with the sections named in the
+same way as in Virtual Rainforest's TOML config files. Each non-`dict` element must be
+an `Iterable`. If you want to use one particular value for all of the runs, you
+therefore need to wrap it in a `list` (or just set the parameter in one of your config
+files).
+
+To add extra processing steps (e.g. to combine data files or produce figures), you need
+to create extra rules. For example, if you wanted to perform some analysis on the
+generated output files using a script called `analysis_program`, you could replace the
+existing `rule all` with something like this:
+
+```snakemake
+rule analysis:
+    input:
+        exp.all_outputs,
+    output:
+        "analysis_output.toml",
+    shell:
+        "analysis_program {input}"
+```
+
+## Running Snakemake locally
 
 To run the workflow on your local machine, use the `snakemake` command. You need to
 specify the maximum number of CPUs Snakemake is allowed to use with the `--cores` flag.
