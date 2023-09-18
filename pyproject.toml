@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
-snakemake = "^7.31.1"
+snakemake = "^7.32.4"
 pre-commit = "^3.4.0"
 virtual-rainforest = { path = "virtual_rainforest" }
 isort = "^5.12.0"
