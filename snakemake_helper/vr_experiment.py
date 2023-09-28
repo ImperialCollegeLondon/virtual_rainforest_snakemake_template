@@ -157,4 +157,4 @@ class VRExperiment:
             raise RuntimeError("Outpath config option was set twice")
 
         # Run simulation
-        vr_run(input, params, outpath / self.MERGE_CONFIG_FILE)
+        vr_run(cfg_paths=input, override_params=params)
