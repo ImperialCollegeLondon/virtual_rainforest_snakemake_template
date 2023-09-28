@@ -23,6 +23,7 @@ OUTPUT_FILES = (
     "initial_state.nc",
     "final_state.nc",
     "all_continuous_data.nc",
+    "vr_run.log",
 )
 
 
