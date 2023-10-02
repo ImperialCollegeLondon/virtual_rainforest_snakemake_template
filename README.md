@@ -15,7 +15,12 @@ these to git. This should allow others to easily reproduce your work.
 
 ## Getting started
 
-First you need to clone this repository and check out its submodules:
+If you are planning on performing your own analyses, it is recommended that you make
+your own repository for this so that you can record your parameter settings. To do this,
+click the green "Use this template" button at the top of this page.
+
+Then you will need to clone either your own repository or, if you have not made your own
+copy, this one, e.g.:
 
 ```sh
 git clone --recursive https://github.com/ImperialCollegeLondon/virtual_rainforest_snakemake_template.git
