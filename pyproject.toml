@@ -6,7 +6,7 @@ authors = ["Alex Dewar <a.dewar@imperial.ac.uk>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12"
+python = ">=3.10,<3.12"
 snakemake = "^7.32.4"
 pre-commit = "^3.4.0"
 virtual-rainforest = { path = "virtual_rainforest" }

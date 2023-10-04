@@ -23,6 +23,7 @@ OUTPUT_FILES = (
     "initial_state.nc",
     "final_state.nc",
     "all_continuous_data.nc",
+    "vr_run.log",
 )
 
 
@@ -87,7 +88,9 @@ def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
     output = [str(outpath / file) for file in OUTPUT_FILES]
     vr_exp.run(input, output)
     vr_run_mock.assert_called_once_with(
-        input, params, outpath / "vr_full_model_configuration.toml"
+        cfg_paths=input,
+        override_params=params,
+        logfile=outpath / "vr_run.log",
     )
 
 
@@ -133,7 +136,9 @@ def test_run_overlapping_params(vr_run_mock: Mock) -> None:
     output = [str(outpath / file) for file in OUTPUT_FILES]
     exp.run(input, output)
     vr_run_mock.assert_called_once_with(
-        input, params, outpath / "vr_full_model_configuration.toml"
+        cfg_paths=input,
+        override_params=params,
+        logfile=outpath / "vr_run.log",
     )
 
 

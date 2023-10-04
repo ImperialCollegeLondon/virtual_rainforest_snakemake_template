@@ -85,8 +85,10 @@ class VRExperiment:
     """Represents all parameter sets which are being tested."""
 
     MERGE_CONFIG_FILE = "vr_full_model_configuration.toml"
+    LOG_FILE = "vr_run.log"
     OUTPUT_FILES = {
         MERGE_CONFIG_FILE,
+        LOG_FILE,
         "initial_state.nc",
         "final_state.nc",
         "all_continuous_data.nc",
@@ -157,4 +159,4 @@ class VRExperiment:
             raise RuntimeError("Outpath config option was set twice")
 
         # Run simulation
-        vr_run(input, params, outpath / self.MERGE_CONFIG_FILE)
+        vr_run(cfg_paths=input, override_params=params, logfile=outpath / self.LOG_FILE)
