@@ -1,4 +1,5 @@
 """Tests for the VRExperiment class."""
+
 from itertools import product
 from pathlib import Path
 from typing import Any
