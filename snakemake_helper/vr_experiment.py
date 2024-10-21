@@ -3,6 +3,7 @@
 The main functionality for this module lies in the VRExperiment class, which represents
 all the parameter sets which are being tested.
 """
+
 from collections.abc import Iterable, Sequence
 from itertools import product
 from pathlib import Path
