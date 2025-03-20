@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A template repository for running Virtual Rainforest analyses using Snakemake."
 authors = ["Alex Dewar <a.dewar@imperial.ac.uk>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
