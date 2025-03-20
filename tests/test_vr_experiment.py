@@ -1,4 +1,5 @@
 """Tests for the VRExperiment class."""
+
 from itertools import product
 from pathlib import Path
 from typing import Any
@@ -10,7 +11,7 @@ import pytest
 from snakemake_helper import VRExperiment
 from snakemake_helper.vr_experiment import _get_outpath_with_wildcards
 
-PARAMS = {
+PARAMS: dict = {
     "b": {"c": {"param": range(2, 4)}},
     "a": {"param": range(2)},
 }
@@ -36,7 +37,7 @@ def test_get_outpath_with_wildcards() -> None:
 
 @pytest.fixture
 def vr_exp():
-    """A fixture providing a VRExperiment."""
+    """Return a VRExperiment."""
     return VRExperiment("out", PARAMS)
 
 
@@ -58,9 +59,7 @@ def test_all_outputs(vr_exp: VRExperiment) -> None:
     """Test the all_outputs property."""
     outpaths = [
         Path(f"out/a.param_{a}/b.c.param_{b}")
-        for a, b in product(
-            PARAMS["a"]["param"], PARAMS["b"]["c"]["param"]  # type: ignore
-        )
+        for a, b in product(PARAMS["a"]["param"], PARAMS["b"]["c"]["param"])
     ]
 
     expected = np.array(

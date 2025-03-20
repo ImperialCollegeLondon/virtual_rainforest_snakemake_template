@@ -3,17 +3,18 @@
 The main functionality for this module lies in the VRExperiment class, which represents
 all the parameter sets which are being tested.
 """
+
 from collections.abc import Iterable, Sequence
 from itertools import product
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from virtual_rainforest.core.config import config_merge
 from virtual_rainforest.entry_points import vr_run
 
 
 def _permute_parameter_grid(
-    param_grid: dict[str, Iterable]
+    param_grid: dict[str, Iterable],
 ) -> Iterable[dict[str, Any]]:
     """Generate each combination of parameters for the given parameter grid.
 
@@ -46,7 +47,10 @@ def _flatten_dict(d: dict[str, Any]) -> dict[str, Any]:
 
 
 def _flatten_dict_inner(value: Any, out: dict[str, Any], key_prefix: str) -> None:
-    """Helper function for _flatten_dict."""
+    """Flatten nested dicts.
+
+    Used internally by _flatten_dict.
+    """
     if isinstance(value, dict):
         for key2, value2 in value.items():
             _flatten_dict_inner(value2, out, f"{key_prefix}.{key2}")
@@ -55,7 +59,7 @@ def _flatten_dict_inner(value: Any, out: dict[str, Any], key_prefix: str) -> Non
 
 
 def _unflatten_dict(d: dict[str, Any]) -> dict[str, Any]:
-    """Performs the opposite operation to _flatten_dict.
+    """Perform the opposite operation to _flatten_dict.
 
     >>> _unflatten_dict({'a.b': 1})
     {'a': {'b': 1}}
@@ -77,7 +81,7 @@ def _get_outpath_with_wildcards(out_path_root: str, param_names: Iterable[str]) 
     """
     outpath = Path(out_path_root)
     for name in sorted(param_names):
-        outpath /= f"{name}_{{{name.replace('.','_')}}}"
+        outpath /= f"{name}_{{{name.replace('.', '_')}}}"
     return str(outpath)
 
 
@@ -86,7 +90,7 @@ class VRExperiment:
 
     MERGE_CONFIG_FILE = "vr_full_model_configuration.toml"
     LOG_FILE = "vr_run.log"
-    OUTPUT_FILES = {
+    OUTPUT_FILES: ClassVar = {
         MERGE_CONFIG_FILE,
         LOG_FILE,
         "initial_state.nc",
@@ -103,6 +107,7 @@ class VRExperiment:
         Args:
             out_path_root: The folder used as a root by the different output folders
             param_grid: The grid of parameters to be used
+
         """
         params_flat: dict[str, Iterable] = _flatten_dict(param_grid)
         self._outpath = _get_outpath_with_wildcards(out_path_root, params_flat.keys())
