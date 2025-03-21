@@ -33,6 +33,8 @@ lint.select = [
     "RUF", # ruff
 ]
 lint.ignore = ["D203", "D213"]
+lint.pydocstyle.convention = "google"
+
 exclude = ["virtual_rainforest"]
 
 [tool.pytest.ini_options]
