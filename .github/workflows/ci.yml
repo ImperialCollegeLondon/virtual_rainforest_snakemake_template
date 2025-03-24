@@ -48,7 +48,7 @@ jobs:
 
     - name: Upload coverage to Codecov
       if: matrix.os == 'ubuntu-latest' && success()
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
 
     - name: Run Snakemake with example data
       if: "!cancelled()" # Run this step, even if the previous one fails
