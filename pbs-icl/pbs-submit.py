@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""This is a wrapper script for invoking qsub with the correct arguments."""
+"""A wrapper script for invoking qsub with the correct arguments."""
+
 import math
 import sys
 from os import execvp
@@ -12,7 +13,7 @@ def get_runtime_str(runtime_min: int) -> str:
 
 
 def main(threads: int, mem_mb: int, runtime_min: int, job_script: str) -> None:
-    """The main entry point to this script."""
+    """Launch qsub with the specified arguments."""
     # qsub wants memory requirement in whole gigabytes
     mem_gb = max(1, math.ceil(mem_mb / 1000))
 

@@ -3,24 +3,33 @@
 The main functionality for this module lies in the VRExperiment class, which represents
 all the parameter sets which are being tested.
 """
+
 from collections.abc import Iterable, Sequence
 from itertools import product
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 from virtual_rainforest.core.config import config_merge
 from virtual_rainforest.entry_points import vr_run
 
 
 def _permute_parameter_grid(
-    param_grid: dict[str, Iterable]
+    param_grid: dict[str, Iterable],
 ) -> Iterable[dict[str, Any]]:
     """Generate each combination of parameters for the given parameter grid.
 
     This function is a generator so the grid is computed lazily.
 
-    >>> list(_permute_parameter_grid({'a': range(2), 'b': range(3)}))
-    [{'a': 0, 'b': 0}, {'a': 0, 'b': 1}, {'a': 0, 'b': 2}, {'a': 1, 'b': 0}, {'a': 1, 'b': 1}, {'a': 1, 'b': 2}]
+    Args:
+        param_grid: A dict where the key is the name of a param and the value is an
+            Iterable of possible values.
+
+    Returns:
+        All combinations of parameters in sequence
+
+    Examples:
+        >>> list(_permute_parameter_grid({'a': range(2), 'b': range(3)}))
+        [{'a': 0, 'b': 0}, {'a': 0, 'b': 1}, {'a': 0, 'b': 2}, {'a': 1, 'b': 0}, {'a': 1, 'b': 1}, {'a': 1, 'b': 2}]
     """  # noqa: E501
     if not param_grid:
         return
@@ -36,29 +45,52 @@ def _flatten_dict(d: dict[str, Any]) -> dict[str, Any]:
 
     Subkeys are separated by dots.
 
-    >>> _flatten_dict({'a': {'b': 1}})
-    {'a.b': 1}
+    Args:
+        d: Top-level nested dict
+
+    Returns:
+        The flattened dict
+
+    Examples:
+        >>> _flatten_dict({'a': {'b': 1}})
+        {'a.b': 1}
     """
     out: dict[str, Any] = {}
     for key, value in d.items():
-        _flatten_dict_inner(value, out, key)
+        _flatten_dict_inner(out, key, value)
     return out
 
 
-def _flatten_dict_inner(value: Any, out: dict[str, Any], key_prefix: str) -> None:
-    """Helper function for _flatten_dict."""
+def _flatten_dict_inner(out: dict[str, Any], key_prefix: str, value: Any) -> None:
+    """Flatten nested dicts.
+
+    Used internally by _flatten_dict.
+
+    Args:
+        out: The dict to store values in
+        key_prefix: The prefix of the key name. If there are sub-dicts, the key will be
+            the names concatenated with dots.
+        value: The value to assign to the new dict entry
+    """
     if isinstance(value, dict):
         for key2, value2 in value.items():
-            _flatten_dict_inner(value2, out, f"{key_prefix}.{key2}")
+            _flatten_dict_inner(out, f"{key_prefix}.{key2}", value2)
     else:
         out[key_prefix] = value
 
 
 def _unflatten_dict(d: dict[str, Any]) -> dict[str, Any]:
-    """Performs the opposite operation to _flatten_dict.
+    """Perform the opposite operation to _flatten_dict.
 
-    >>> _unflatten_dict({'a.b': 1})
-    {'a': {'b': 1}}
+    Args:
+        d: A nested dict
+
+    Returns:
+        The unflattened (nested) dict
+
+    Examples:
+        >>> _unflatten_dict({'a.b': 1})
+        {'a': {'b': 1}}
     """
     out: dict[str, Any] = {}
     for key, value in d.items():
@@ -74,10 +106,17 @@ def _get_outpath_with_wildcards(out_path_root: str, param_names: Iterable[str]) 
     """Get the output path with Snakemake wildcards in it.
 
     Parameter names are used for wildcards, with dots replaced with underscores.
+
+    Args:
+        out_path_root: The root output folder
+        param_names: The names of all parameters under investigation
+
+    Returns:
+        The output path with Snakemake wildcards
     """
     outpath = Path(out_path_root)
     for name in sorted(param_names):
-        outpath /= f"{name}_{{{name.replace('.','_')}}}"
+        outpath /= f"{name}_{{{name.replace('.', '_')}}}"
     return str(outpath)
 
 
@@ -86,7 +125,7 @@ class VRExperiment:
 
     MERGE_CONFIG_FILE = "vr_full_model_configuration.toml"
     LOG_FILE = "vr_run.log"
-    OUTPUT_FILES = {
+    OUTPUT_FILES: ClassVar = {
         MERGE_CONFIG_FILE,
         LOG_FILE,
         "initial_state.nc",
@@ -121,7 +160,11 @@ class VRExperiment:
     def _get_param_set_dict(
         self, params_flat: dict[str, Iterable]
     ) -> dict[Path, dict[str, Any]]:
-        """Return a dict with parameter sets keyed by output path."""
+        """Return a dict with parameter sets keyed by output path.
+
+        Args:
+            params_flat: A flat dict of parameters to investigate
+        """
         param_set_dict = {}
         for param_set in _permute_parameter_grid(params_flat):
             args_dict = {
@@ -143,7 +186,12 @@ class VRExperiment:
         return [str(Path(self._outpath) / f) for f in self.OUTPUT_FILES]
 
     def run(self, input: Sequence[str], output: Sequence[str]):
-        """Run a simulation for the specified config to be saved in output."""
+        """Run a simulation for the specified config to be saved in output.
+
+        Args:
+            input: Input paths
+            output: Output paths
+        """
         outpath = Path(output[0]).parent
         if not all(Path(path).parent == outpath for path in output):
             raise RuntimeError("Output files are not all in same folder")

@@ -4,27 +4,38 @@ version = "0.1.0"
 description = "A template repository for running Virtual Rainforest analyses using Snakemake."
 authors = ["Alex Dewar <a.dewar@imperial.ac.uk>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.12"
-snakemake = "^7.32.4"
+python = ">=3.11,<3.12"
+snakemake = "^9.0.1"
 pre-commit = "^3.4.0"
 virtual-rainforest = { path = "virtual_rainforest" }
-isort = "^5.12.0"
-black = "^23.9.1"
 mypy = "^1.5.1"
 pytest = "^7.4.2"
 pytest-cov = "^4.1.0"
 pytest-mypy = "^0.10.3"
-flake8 = "^6.1.0"
 numpy = "^1.26.0"
+ruff = "^0.11.1"
 
 [tool.mypy]
 ignore_missing_imports = true
 exclude = [".venv/"]
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+target-version = "py311"
+lint.select = [
+    "D",   # pydocstyle
+    "E",   # pycodestyle
+    "F",   # Pyflakes
+    "I",   # isort
+    "UP",  # pyupgrade
+    "RUF", # ruff
+]
+lint.ignore = ["D203", "D213"]
+lint.pydocstyle.convention = "google"
+
+exclude = ["virtual_rainforest"]
 
 [tool.pytest.ini_options]
 addopts = "-v --mypy -p no:warnings --cov=snakemake_helper --cov-report=html --doctest-modules snakemake_helper tests"
