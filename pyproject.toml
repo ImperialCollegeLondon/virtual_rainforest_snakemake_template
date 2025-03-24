@@ -12,7 +12,7 @@ snakemake = "^9.0.1"
 pre-commit = "^3.4.0"
 virtual-rainforest = { path = "virtual_rainforest" }
 mypy = "^1.5.1"
-pytest = "^7.4.2"
+pytest = "^8.3.5"
 pytest-cov = "^4.1.0"
 pytest-mypy = "^0.10.3"
 numpy = "^1.26.0"
