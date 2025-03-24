@@ -2,8 +2,12 @@
 # run multiple simulations using the specified parameter grid and put the results in a
 # folder called "out". For more information, consult README.md.
 
-from virtual_rainforest import example_data_path
+from pathlib import Path
+from virtual_ecosystem import example_data_path
 from snakemake_helper import VRExperiment
+
+# NB: You should replace this with the path to your config(s)
+CONFIG_PATH = (Path(example_data_path) / "config",)
 
 # The parameter grid to be used for the simulation
 PARAMS = {
@@ -19,8 +23,7 @@ rule all:
 
 rule vr:
     input:
-        # NB: You should replace this with the path to your config(s)
-        example_data_path,
+        CONFIG_PATH,
     output:
         exp.output,
     run:

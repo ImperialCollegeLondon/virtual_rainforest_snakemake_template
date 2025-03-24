@@ -10,12 +10,12 @@ package-mode = false
 python = ">=3.11,<3.12"
 snakemake = "^9.0.1"
 pre-commit = "^3.4.0"
-virtual-rainforest = { path = "virtual_rainforest" }
+virtual-ecosystem = { path = "virtual_ecosystem" }
 mypy = "^1.5.1"
 pytest = "^8.3.5"
 pytest-cov = "^4.1.0"
 pytest-mypy = "^0.10.3"
-numpy = "^1.26.0"
+numpy = "^2.0"
 ruff = "^0.11.1"
 
 [tool.mypy]
@@ -34,8 +34,6 @@ lint.select = [
 ]
 lint.ignore = ["D203", "D213"]
 lint.pydocstyle.convention = "google"
-
-exclude = ["virtual_rainforest"]
 
 [tool.pytest.ini_options]
 addopts = "-v --mypy -p no:warnings --cov=snakemake_helper --cov-report=html --doctest-modules snakemake_helper tests"

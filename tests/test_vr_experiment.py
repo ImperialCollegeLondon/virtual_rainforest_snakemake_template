@@ -24,7 +24,7 @@ OUTPUT_FILES = (
     "initial_state.nc",
     "final_state.nc",
     "all_continuous_data.nc",
-    "vr_run.log",
+    "ve_run.log",
 )
 
 
@@ -69,9 +69,9 @@ def test_all_outputs(vr_exp: VRExperiment) -> None:
     assert (expected == actual).all()
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
-    """Test the run() method invokes vr_run() correctly."""
+@patch("snakemake_helper.vr_experiment.ve_run")
+def test_run(ve_run_mock: Mock, vr_exp: VRExperiment) -> None:
+    """Test the run() method invokes ve_run() correctly."""
     params: dict[str, dict[str, Any]] = {
         "a": {"param": 1},
         "b": {"c": {"param": 2}},
@@ -86,15 +86,15 @@ def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
     input = ("dataset",)
     output = [str(outpath / file) for file in OUTPUT_FILES]
     vr_exp.run(input, output)
-    vr_run_mock.assert_called_once_with(
+    ve_run_mock.assert_called_once_with(
         cfg_paths=input,
         override_params=params,
-        logfile=outpath / "vr_run.log",
+        logfile=outpath / "ve_run.log",
     )
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run_bad_input(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
+@patch("snakemake_helper.vr_experiment.ve_run")
+def test_run_bad_input(ve_run_mock: Mock, vr_exp: VRExperiment) -> None:
     """Test the run() method raises an error if the outputs are unknown."""
     outpath = Path("out/a.param_1/b.c.param_2")
     outputs = (str(outpath / file) for file in OUTPUT_FILES)
@@ -108,9 +108,9 @@ def test_run_bad_input(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
         vr_exp.run(("dataset",), (*outputs, str(outpath / "unknown_file.txt")))
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run_overlapping_params(vr_run_mock: Mock) -> None:
-    """Test the run() method invokes vr_run() correctly when config options overlap.
+@patch("snakemake_helper.vr_experiment.ve_run")
+def test_run_overlapping_params(ve_run_mock: Mock) -> None:
+    """Test the run() method invokes ve_run() correctly when config options overlap.
 
     The parameter dicts have to be recursively merged in order not to clobber sub-dicts.
     """
@@ -134,15 +134,15 @@ def test_run_overlapping_params(vr_run_mock: Mock) -> None:
     input = ("dataset",)
     output = [str(outpath / file) for file in OUTPUT_FILES]
     exp.run(input, output)
-    vr_run_mock.assert_called_once_with(
+    ve_run_mock.assert_called_once_with(
         cfg_paths=input,
         override_params=params,
-        logfile=outpath / "vr_run.log",
+        logfile=outpath / "ve_run.log",
     )
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run_outpath_set_twice(vr_run_mock: Mock) -> None:
+@patch("snakemake_helper.vr_experiment.ve_run")
+def test_run_outpath_set_twice(ve_run_mock: Mock) -> None:
     """Test the run() method raises an error if the outpath is set twice.
 
     It can't be set as a config option.
