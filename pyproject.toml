@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "virtual-rainforest-snakemake-template"
+name = "virtual-ecosystem-snakemake-template"
 version = "0.1.0"
-description = "A template repository for running Virtual Rainforest analyses using Snakemake."
+description = "A template repository for running Virtual Ecosystem analyses using Snakemake."
 authors = ["Alex Dewar <a.dewar@imperial.ac.uk>"]
 readme = "README.md"
 package-mode = false

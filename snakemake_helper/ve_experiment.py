@@ -1,4 +1,4 @@
-"""Helper functionality for using Virtual Rainforest with Snakemake.
+"""Helper functionality for using Virtual Ecosystem with Snakemake.
 
 The main functionality for this module lies in the VRExperiment class, which represents
 all the parameter sets which are being tested.
@@ -120,7 +120,7 @@ def _get_outpath_with_wildcards(out_path_root: str, param_names: Iterable[str]) 
     return str(outpath)
 
 
-class VRExperiment:
+class VEExperiment:
     """Represents all parameter sets which are being tested."""
 
     MERGE_CONFIG_FILE = "vr_full_model_configuration.toml"
