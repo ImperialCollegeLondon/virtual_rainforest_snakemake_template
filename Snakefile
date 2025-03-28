@@ -7,7 +7,7 @@ from virtual_ecosystem import example_data_path
 from snakemake_helper import VEExperiment
 
 # NB: You should replace this with the path to your config(s)
-CONFIG_PATH = (Path(example_data_path) / "config",)
+CONFIG_PATH = Path(example_data_path) / "config"
 
 # The parameter grid to be used for the simulation
 PARAMS = {
