@@ -1,4 +1,4 @@
-"""Helper functionality for using Virtual Rainforest with Snakemake.
+"""Helper functionality for using Virtual Ecosystem with Snakemake.
 
 The main functionality for this module lies in the VRExperiment class, which represents
 all the parameter sets which are being tested.
@@ -9,8 +9,8 @@ from itertools import product
 from pathlib import Path
 from typing import Any, ClassVar
 
-from virtual_rainforest.core.config import config_merge
-from virtual_rainforest.entry_points import vr_run
+from virtual_ecosystem.core.config import config_merge
+from virtual_ecosystem.entry_points import ve_run
 
 
 def _permute_parameter_grid(
@@ -120,11 +120,11 @@ def _get_outpath_with_wildcards(out_path_root: str, param_names: Iterable[str]) 
     return str(outpath)
 
 
-class VRExperiment:
+class VEExperiment:
     """Represents all parameter sets which are being tested."""
 
     MERGE_CONFIG_FILE = "vr_full_model_configuration.toml"
-    LOG_FILE = "vr_run.log"
+    LOG_FILE = "ve_run.log"
     OUTPUT_FILES: ClassVar = {
         MERGE_CONFIG_FILE,
         LOG_FILE,
@@ -207,4 +207,4 @@ class VRExperiment:
             raise RuntimeError("Outpath config option was set twice")
 
         # Run simulation
-        vr_run(cfg_paths=input, override_params=params, logfile=outpath / self.LOG_FILE)
+        ve_run(cfg_paths=input, override_params=params, logfile=outpath / self.LOG_FILE)

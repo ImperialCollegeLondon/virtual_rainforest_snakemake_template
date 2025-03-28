@@ -26,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
-        python-version: [ "3.11" ]
+        python-version: [ "3.11", "3.12" ]
 
     steps:
     - uses: actions/checkout@v4
@@ -53,3 +53,15 @@ jobs:
     - name: Run Snakemake with example data
       if: "!cancelled()" # Run this step, even if the previous one fails
       run: poetry run snakemake --cores all
+
+    - name: Show Snakemake logs
+      if: "!cancelled()" # Run this step, even if the previous one fails
+      shell: bash
+      run: |
+        if [ -d .snakemake/log/ ]; then
+            for f in .snakemake/log/*.log; do
+                echo ======== $f ========
+                cat $f
+                echo ======== END ========
+            done
+        fi

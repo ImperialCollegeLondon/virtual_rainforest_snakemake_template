@@ -1,4 +1,4 @@
 set-resources:
-  vr:
+  ve:
     mem_mb: 2000
     runtime: "15m"

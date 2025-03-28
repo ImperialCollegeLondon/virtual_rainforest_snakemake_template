@@ -1,15 +1,19 @@
-# This file is a simple example of a Snakefile for invoking Virtual Rainforest. It will
+# This file is a simple example of a Snakefile for invoking Virtual Ecosystem. It will
 # run multiple simulations using the specified parameter grid and put the results in a
 # folder called "out". For more information, consult README.md.
 
-from virtual_rainforest import example_data_path
-from snakemake_helper import VRExperiment
+from pathlib import Path
+from virtual_ecosystem import example_data_path
+from snakemake_helper import VEExperiment
+
+# NB: You should replace this with the path to your config(s)
+CONFIG_PATH = Path(example_data_path) / "config"
 
 # The parameter grid to be used for the simulation
 PARAMS = {
     "hydrology": {"initial_soil_moisture": (0.5, 0.9)},
 }
-exp = VRExperiment("out", PARAMS)
+exp = VEExperiment("out", PARAMS)
 
 
 rule all:
@@ -17,10 +21,9 @@ rule all:
         exp.all_outputs,
 
 
-rule vr:
+rule ve:
     input:
-        # NB: You should replace this with the path to your config(s)
-        example_data_path,
+        CONFIG_PATH,
     output:
         exp.output,
     run:

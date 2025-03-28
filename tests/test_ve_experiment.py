@@ -1,4 +1,4 @@
-"""Tests for the VRExperiment class."""
+"""Tests for the VEExperiment class."""
 
 from itertools import product
 from pathlib import Path
@@ -8,8 +8,8 @@ from unittest.mock import Mock, patch
 import numpy as np
 import pytest
 
-from snakemake_helper import VRExperiment
-from snakemake_helper.vr_experiment import _get_outpath_with_wildcards
+from snakemake_helper import VEExperiment
+from snakemake_helper.ve_experiment import _get_outpath_with_wildcards
 
 PARAMS: dict = {
     "b": {"c": {"param": range(2, 4)}},
@@ -24,7 +24,7 @@ OUTPUT_FILES = (
     "initial_state.nc",
     "final_state.nc",
     "all_continuous_data.nc",
-    "vr_run.log",
+    "ve_run.log",
 )
 
 
@@ -36,26 +36,26 @@ def test_get_outpath_with_wildcards() -> None:
 
 
 @pytest.fixture
-def vr_exp():
-    """Return a VRExperiment."""
-    return VRExperiment("out", PARAMS)
+def ve_exp():
+    """Return a VEExperiment."""
+    return VEExperiment("out", PARAMS)
 
 
-def test_outpath(vr_exp: VRExperiment) -> None:
+def test_outpath(ve_exp: VEExperiment) -> None:
     """Test the outpath property."""
-    assert Path(vr_exp.outpath) == Path("out/a.param_{a_param}/b.c.param_{b_c_param}")
+    assert Path(ve_exp.outpath) == Path("out/a.param_{a_param}/b.c.param_{b_c_param}")
 
 
-def test_output(vr_exp: VRExperiment) -> None:
+def test_output(ve_exp: VEExperiment) -> None:
     """Test the output property."""
     outpath = Path("out/a.param_{a_param}/b.c.param_{b_c_param}")
 
     expected = np.array(sorted(str(outpath / file) for file in OUTPUT_FILES))
-    actual = np.array(sorted(vr_exp.output))
+    actual = np.array(sorted(ve_exp.output))
     assert (expected == actual).all()
 
 
-def test_all_outputs(vr_exp: VRExperiment) -> None:
+def test_all_outputs(ve_exp: VEExperiment) -> None:
     """Test the all_outputs property."""
     outpaths = [
         Path(f"out/a.param_{a}/b.c.param_{b}")
@@ -65,13 +65,13 @@ def test_all_outputs(vr_exp: VRExperiment) -> None:
     expected = np.array(
         sorted(str(dir / file) for dir, file in product(outpaths, OUTPUT_FILES))
     )
-    actual = np.array(sorted(vr_exp.all_outputs))
+    actual = np.array(sorted(ve_exp.all_outputs))
     assert (expected == actual).all()
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
-    """Test the run() method invokes vr_run() correctly."""
+@patch("snakemake_helper.ve_experiment.ve_run")
+def test_run(ve_run_mock: Mock, ve_exp: VEExperiment) -> None:
+    """Test the run() method invokes ve_run() correctly."""
     params: dict[str, dict[str, Any]] = {
         "a": {"param": 1},
         "b": {"c": {"param": 2}},
@@ -85,32 +85,32 @@ def test_run(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
 
     input = ("dataset",)
     output = [str(outpath / file) for file in OUTPUT_FILES]
-    vr_exp.run(input, output)
-    vr_run_mock.assert_called_once_with(
+    ve_exp.run(input, output)
+    ve_run_mock.assert_called_once_with(
         cfg_paths=input,
         override_params=params,
-        logfile=outpath / "vr_run.log",
+        logfile=outpath / "ve_run.log",
     )
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run_bad_input(vr_run_mock: Mock, vr_exp: VRExperiment) -> None:
+@patch("snakemake_helper.ve_experiment.ve_run")
+def test_run_bad_input(ve_run_mock: Mock, ve_exp: VEExperiment) -> None:
     """Test the run() method raises an error if the outputs are unknown."""
     outpath = Path("out/a.param_1/b.c.param_2")
     outputs = (str(outpath / file) for file in OUTPUT_FILES)
 
     # File in unknown folder
     with pytest.raises(RuntimeError):
-        vr_exp.run(("dataset",), (*outputs, f"another/folder/{OUTPUT_FILES[0]}"))
+        ve_exp.run(("dataset",), (*outputs, f"another/folder/{OUTPUT_FILES[0]}"))
 
     # Unknown file in known folder
     with pytest.raises(RuntimeError):
-        vr_exp.run(("dataset",), (*outputs, str(outpath / "unknown_file.txt")))
+        ve_exp.run(("dataset",), (*outputs, str(outpath / "unknown_file.txt")))
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run_overlapping_params(vr_run_mock: Mock) -> None:
-    """Test the run() method invokes vr_run() correctly when config options overlap.
+@patch("snakemake_helper.ve_experiment.ve_run")
+def test_run_overlapping_params(ve_run_mock: Mock) -> None:
+    """Test the run() method invokes ve_run() correctly when config options overlap.
 
     The parameter dicts have to be recursively merged in order not to clobber sub-dicts.
     """
@@ -118,7 +118,7 @@ def test_run_overlapping_params(vr_run_mock: Mock) -> None:
         "a": {"param": range(2)},
         "core": {"b": {"param": range(2)}},
     }
-    exp = VRExperiment("out", all_params)
+    exp = VEExperiment("out", all_params)
     params: dict[str, dict[str, Any]] = {
         "a": {"param": 0},
         "core": {"b": {"param": 1}},
@@ -134,15 +134,15 @@ def test_run_overlapping_params(vr_run_mock: Mock) -> None:
     input = ("dataset",)
     output = [str(outpath / file) for file in OUTPUT_FILES]
     exp.run(input, output)
-    vr_run_mock.assert_called_once_with(
+    ve_run_mock.assert_called_once_with(
         cfg_paths=input,
         override_params=params,
-        logfile=outpath / "vr_run.log",
+        logfile=outpath / "ve_run.log",
     )
 
 
-@patch("snakemake_helper.vr_experiment.vr_run")
-def test_run_outpath_set_twice(vr_run_mock: Mock) -> None:
+@patch("snakemake_helper.ve_experiment.ve_run")
+def test_run_outpath_set_twice(ve_run_mock: Mock) -> None:
     """Test the run() method raises an error if the outpath is set twice.
 
     It can't be set as a config option.
@@ -151,7 +151,7 @@ def test_run_outpath_set_twice(vr_run_mock: Mock) -> None:
         "a": {"param": range(2)},
         "core": {"data_output_options": {"out_path": ("something",)}},
     }
-    exp = VRExperiment("out", all_params)
+    exp = VEExperiment("out", all_params)
     params: dict[str, dict[str, Any]] = {
         "a": {"param": 0},
         "core": {"data_output_options": {"out_path": ("something",)}},

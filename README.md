@@ -1,9 +1,9 @@
-# Virtual Rainforest Snakemake template
+# Virtual Ecosystem Snakemake template
 
-![GitHub CI](https://github.com/ImperialCollegeLondon/virtual_rainforest_snakemake_template/actions/workflows/ci.yml/badge.svg)
-[![codecov](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template/graph/badge.svg?token=BN2Y4SE4W0)](https://codecov.io/gh/ImperialCollegeLondon/virtual_rainforest_snakemake_template)
+![GitHub CI](https://github.com/ImperialCollegeLondon/virtual_ecosystem_snakemake_template/actions/workflows/ci.yml/badge.svg)
+[![codecov](https://codecov.io/gh/ImperialCollegeLondon/virtual_ecosystem_snakemake_template/graph/badge.svg?token=BN2Y4SE4W0)](https://codecov.io/gh/ImperialCollegeLondon/virtual_ecosystem_snakemake_template)
 
-This is a template repository for running [Virtual Rainforest] analyses using
+This is a template repository for running [Virtual Ecosystem] analyses using
 [Snakemake]. Snakemake is a workflow management system, which allows for running jobs in
 parallel on a number of backends, including multiple cores on the same machine as well
 as cluster systems.
@@ -23,7 +23,7 @@ Then you will need to clone either your own repository or, if you have not made 
 copy, this one, e.g.:
 
 ```sh
-git clone --recursive https://github.com/ImperialCollegeLondon/virtual_rainforest_snakemake_template.git
+git clone --recursive https://github.com/ImperialCollegeLondon/virtual_ecosystem_snakemake_template.git
 ```
 
 Note the extra `--recursive` flag! If you forgot to check out the submodules, you can do
@@ -50,13 +50,13 @@ poetry shell
 Snakemake uses Snakefiles to specify workflows. [Look at the Snakefile] in this
 repository to see an example workflow.
 
-The Snakefile in this repository is set up to run Virtual Rainforest with a few
+The Snakefile in this repository is set up to run Virtual Ecosystem with a few
 different parameters. If you just want to check that things are working, feel free to
 skip this section for now.
 
 If you want to use a different parameter grid, you need to modify the `PARAMS` variable.
 The parameters to vary are specified in a nested `dict`, with the sections named in the
-same way as in Virtual Rainforest's TOML config files. Each non-`dict` element must be
+same way as in Virtual Ecosystem's TOML config files. Each non-`dict` element must be
 an `Iterable`. If you want to use one particular value for all of the runs, you
 therefore need to wrap it in a `list` (or just set the parameter in one of your config
 files).
@@ -132,6 +132,6 @@ snakemake --profile pbs-icl --workflow-profile workflow-profile
 [profiles]: https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles
 [Snakefile]: ./Snakefile
 [Snakemake]: https://snakemake.readthedocs.io/en/stable/
-[Virtual Rainforest]: https://github.com/ImperialCollegeLondon/virtual_rainforest
+[Virtual Ecosystem]: https://github.com/ImperialCollegeLondon/virtual_ecosystem
 [workflow profile]: https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles
 [`workflow-profile`]: ./workflow-profile
