@@ -1240,21 +1240,20 @@ testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtuale
 
 [[package]]
 name = "pytest-mypy"
-version = "0.10.3"
-description = "Mypy static type checker plugin for Pytest"
+version = "1.0.1"
+description = "A Pytest Plugin for Mypy"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "pytest-mypy-0.10.3.tar.gz", hash = "sha256:f8458f642323f13a2ca3e2e61509f7767966b527b4d8adccd5032c3e7b4fd3db"},
-    {file = "pytest_mypy-0.10.3-py3-none-any.whl", hash = "sha256:7638d0d3906848fc1810cb2f5cc7fceb4cc5c98524aafcac58f28620e3102053"},
+    {file = "pytest_mypy-1.0.1-py3-none-any.whl", hash = "sha256:ad7133c9b92c802e032f2596590ebede7eea7c418e61d60d5cdd571b55c72056"},
+    {file = "pytest_mypy-1.0.1.tar.gz", hash = "sha256:3f5fcaff75c80dccc6b68cf5ecc28e1bbe71e95309469eb7a28bf408ce55c074"},
 ]
 
 [package.dependencies]
-attrs = ">=19.0"
 filelock = ">=3.0"
-mypy = {version = ">=0.900", markers = "python_version >= \"3.11\""}
-pytest = {version = ">=6.2", markers = "python_version >= \"3.10\""}
+mypy = ">=1.0"
+pytest = ">=7.0"
 
 [[package]]
 name = "python-dateutil"
@@ -2177,4 +2176,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<3.12"
-content-hash = "9138b454f71558f1edd120cc32f0963139981b537404287a6f3ce7a204e0332b"
+content-hash = "3f6902eb89bae6f8a67fd7770c6a779000eeb4bd81e4e0d990ad3d2b775446d4"
